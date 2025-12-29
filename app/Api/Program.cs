@@ -19,9 +19,10 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/weatherforecast/{number}", (int number) =>
 {
-    var forecast = Enumerable.Range(1, 9).Select(index =>
+    Console.WriteLine(number);
+    var forecast = Enumerable.Range(1, number).Select(index =>
         new WeatherForecast
         (
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
@@ -32,6 +33,11 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
+
+app.MapGet("/todoitems/", async Task<TodoItems> () =>
+{
+    return await new TodoController().Get();
+});
 
 app.Run();
 
