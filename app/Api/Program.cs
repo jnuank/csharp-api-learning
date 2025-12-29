@@ -34,7 +34,7 @@ app.MapGet("/weatherforecast/{number}", (int number) =>
 })
 .WithName("GetWeatherForecast");
 
-app.MapGet("/todoitems/", async Task<TodoItems> () =>
+app.MapGet("/todoitems/", async () =>
 {
     return await new TodoController().Get();
 });
