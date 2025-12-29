@@ -1,3 +1,5 @@
+public record TodoItems(List<TodoItem> Items);
+public record TodoItem(int Id, string Name, bool IsComplete);
 
 public class TodoController
 {
@@ -9,10 +11,5 @@ public class TodoController
 			new TodoItem(2, "Todo 2", true),
 			new TodoItem(3, "Todo 3", false),
 		})));
-
 	}
 }
-
-public record TodoItems(List<TodoItem> Items);
-
-public record TodoItem(int Id, string Name, bool IsComplete);
