@@ -1,10 +1,30 @@
 using Api.Controller;
+using Api.Driver;
+using Api.Gateway;
+using Api.Usecase;
+using Api.Usecase.Port;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// DIコンテナ
+builder.Services.AddScoped<InMemoryDriver>(_ => new InMemoryDriver(new List<TodoItemDto>
+{
+    new TodoItemDto(1, "Todo 1", false),
+    new TodoItemDto(2, "Todo 2", true),
+    new TodoItemDto(3, "Todo 3", false),
+    new TodoItemDto(4, "Todo 4", true),
+    new TodoItemDto(5, "Todo 5", false),
+    new TodoItemDto(6, "Todo 6", true),
+    new TodoItemDto(7, "Todo 7", false),
+    new TodoItemDto(8, "Todo 8", true),
+    new TodoItemDto(9, "Todo 9", false),
+    new TodoItemDto(10, "Todo 10", true),
+}));
+builder.Services.AddScoped<ITodoItemPort, TodoItemGateway>();
+builder.Services.AddScoped<FetchTodoItemsUsecase>();
+builder.Services.AddScoped<TodoController>();
 
 var app = builder.Build();
 
@@ -36,15 +56,12 @@ app.MapGet("/weatherforecast/{number}", (int number) =>
 })
 .WithName("GetWeatherForecast");
 
-app.MapGet("/todoitems/", async () =>
-{
-    return await new TodoController().Get();
-});
+app.MapGet("/todoitems/", (TodoController controller) => controller.Get());
 
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-    public string TestName => "Test";
+    public static string TestName => "Test";
 }
