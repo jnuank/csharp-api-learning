@@ -1,15 +1,25 @@
+using System.Data;
 using Api.Controller;
 using Api.Driver;
 using Api.Gateway;
 using Api.Usecase;
 using Api.Usecase.Port;
+using Microsoft.Data.Sqlite;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
 // DIコンテナ
-builder.Services.AddScoped<InMemoryDriver>(_ => new InMemoryDriver(new List<TodoItemDto>
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddScoped<IDbConnection>(_ => new SqliteConnection(connectionString));
+
+builder.Services.AddScoped<SQLiteDriver>();
+
+builder.Services.AddScoped<InMemoryDriver>(_ =>
+{
+    Console.WriteLine("InMemoryDriver");
+    return new InMemoryDriver(new List<TodoItemDto>
 {
     new TodoItemDto(1, "Todo 1", false),
     new TodoItemDto(2, "Todo 2", true),
@@ -21,7 +31,8 @@ builder.Services.AddScoped<InMemoryDriver>(_ => new InMemoryDriver(new List<Todo
     new TodoItemDto(8, "Todo 8", true),
     new TodoItemDto(9, "Todo 9", false),
     new TodoItemDto(10, "Todo 10", true),
-}));
+});
+});
 builder.Services.AddScoped<ITodoItemPort, TodoItemGateway>();
 builder.Services.AddScoped<FetchTodoItemsUsecase>();
 builder.Services.AddScoped<TodoController>();

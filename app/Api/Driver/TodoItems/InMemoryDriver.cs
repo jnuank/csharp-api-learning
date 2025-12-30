@@ -8,5 +8,3 @@ public record InMemoryDriver(List<TodoItemDto> memory)
 		return Task.FromResult(memory);
 	}
 }
-
-public record TodoItemDto(int Id, string Name, bool IsComplete);
