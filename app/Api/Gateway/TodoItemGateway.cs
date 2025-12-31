@@ -5,7 +5,7 @@ using Api.Domain;
 using Api.Driver;
 using Api.Usecase.Port;
 
-public record TodoItemGateway(SQLiteDriver driver) : ITodoItemPort
+public record TodoItemGateway(PostgresDriver driver) : ITodoItemPort
 {
 	public async Task<TodoItems> GetAll()
 	{

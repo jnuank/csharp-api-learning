@@ -8,3 +8,5 @@ manifests:
     releases:
       - name: postgres-db
         chartPath: ./db/manifests
+      - name: api
+        chartPath: ./app/manifests

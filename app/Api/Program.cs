@@ -5,6 +5,7 @@ using Api.Gateway;
 using Api.Usecase;
 using Api.Usecase.Port;
 using Microsoft.Data.Sqlite;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +14,10 @@ builder.Services.AddOpenApi();
 // DIコンテナ
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddScoped<IDbConnection>(_ => new SqliteConnection(connectionString));
-
 builder.Services.AddScoped<SQLiteDriver>();
+
+builder.Services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(builder.Configuration.GetConnectionString("PostgresConnection")));
+builder.Services.AddScoped<PostgresDriver>();
 
 builder.Services.AddScoped<InMemoryDriver>(_ =>
 {
