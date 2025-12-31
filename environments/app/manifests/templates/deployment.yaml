@@ -16,6 +16,25 @@ spec:
       - name: api
         imagePullPolicy: IfNotPresent
         image: api-dotnet
+        env:
+          - name: DB_HOST
+            value: postgres-svc
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
+            value: postgres
+          - name: DB_PASSWORD
+            value: password
+          - name: DB_DATABASE
+            value: postgres
+          - name: DB_POOLING
+            value: "true"
+          - name: DB_MIN_POOL_SIZE
+            value: "1"
+          - name: DB_MAX_POOL_SIZE
+            value: "2"
+          - name: DB_MAX_TIMEOUT
+            value: "1"
         resources:
           limits:
             cpu: 500m

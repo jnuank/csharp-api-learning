@@ -16,7 +16,32 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddScoped<IDbConnection>(_ => new SqliteConnection(connectionString));
 builder.Services.AddScoped<SQLiteDriver>();
 
-builder.Services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(builder.Configuration.GetConnectionString("PostgresConnection")));
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
+var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "postgres";
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "password";
+var dbDatabase = Environment.GetEnvironmentVariable("DB_DATABASE") ?? "postgres";
+var dbPooling = Environment.GetEnvironmentVariable("DB_POOLING") ?? "true";
+var dbMinPoolSize = Environment.GetEnvironmentVariable("DB_MIN_POOL_SIZE") ?? "5";
+var dbMaxPoolSize = Environment.GetEnvironmentVariable("DB_MAX_POOL_SIZE") ?? "10";
+var maxTimeout = Environment.GetEnvironmentVariable("DB_MAX_TIMEOUT") ?? "5";
+
+var connectionStringBuilder = new NpgsqlConnectionStringBuilder()
+{
+    Host = dbHost,
+    Port = int.Parse(dbPort),
+    Pooling = bool.Parse(dbPooling),
+    MinPoolSize = int.Parse(dbMinPoolSize),
+    MaxPoolSize = int.Parse(dbMaxPoolSize),
+
+    CommandTimeout = int.Parse(maxTimeout),
+
+
+    Database = dbDatabase,
+    Username = dbUser,
+    Password = dbPassword,
+};
+builder.Services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connectionStringBuilder.ConnectionString));
 builder.Services.AddScoped<PostgresDriver>();
 
 builder.Services.AddScoped<InMemoryDriver>(_ =>
