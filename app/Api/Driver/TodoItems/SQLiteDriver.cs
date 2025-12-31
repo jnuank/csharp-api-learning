@@ -12,6 +12,7 @@ public class SQLiteDriver
 		this.connection = connection;
 
 		Console.WriteLine("テーブル作成");
+
 		this.connection.Execute("DROP TABLE IF EXISTS todo_items");
 
 		this.connection.Execute("""
