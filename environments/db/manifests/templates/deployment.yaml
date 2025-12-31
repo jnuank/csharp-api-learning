@@ -20,7 +20,15 @@ spec:
                   value: password
                 - name: POSTGRES_USER
                   value: postgres
+              volumeMounts:
+                - name: init-script
+                  mountPath: /docker-entrypoint-initdb.d
+                  readOnly: true
               resources:
                 limits:
                     cpu: 500m
                     memory: 512Mi
+            volumes:
+                - name: init-script
+                  configMap:
+                    name: postgres-init-script
