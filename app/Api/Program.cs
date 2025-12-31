@@ -22,7 +22,7 @@ var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "postgres";
 var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "password";
 var dbDatabase = Environment.GetEnvironmentVariable("DB_DATABASE") ?? "postgres";
 var dbPooling = Environment.GetEnvironmentVariable("DB_POOLING") ?? "true";
-var dbMinPoolSize = Environment.GetEnvironmentVariable("DB_MIN_POOL_SIZE") ?? "5";
+var dbMinPoolSize = Environment.GetEnvironmentVariable("DB_MIN_POOL_SIZE") ?? "0";
 var dbMaxPoolSize = Environment.GetEnvironmentVariable("DB_MAX_POOL_SIZE") ?? "10";
 var maxTimeout = Environment.GetEnvironmentVariable("DB_MAX_TIMEOUT") ?? "5";
 
@@ -34,33 +34,15 @@ var connectionStringBuilder = new NpgsqlConnectionStringBuilder()
     MinPoolSize = int.Parse(dbMinPoolSize),
     MaxPoolSize = int.Parse(dbMaxPoolSize),
 
-    CommandTimeout = int.Parse(maxTimeout),
+    Timeout = int.Parse(maxTimeout),
 
 
     Database = dbDatabase,
     Username = dbUser,
     Password = dbPassword,
 };
-builder.Services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connectionStringBuilder.ConnectionString));
-builder.Services.AddScoped<PostgresDriver>();
+builder.Services.AddScoped(_ => new PostgresDriver(connectionStringBuilder.ConnectionString));
 
-builder.Services.AddScoped<InMemoryDriver>(_ =>
-{
-    Console.WriteLine("InMemoryDriver");
-    return new InMemoryDriver(new List<TodoItemDto>
-{
-    new TodoItemDto(1, "Todo 1", false),
-    new TodoItemDto(2, "Todo 2", true),
-    new TodoItemDto(3, "Todo 3", false),
-    new TodoItemDto(4, "Todo 4", true),
-    new TodoItemDto(5, "Todo 5", false),
-    new TodoItemDto(6, "Todo 6", true),
-    new TodoItemDto(7, "Todo 7", false),
-    new TodoItemDto(8, "Todo 8", true),
-    new TodoItemDto(9, "Todo 9", false),
-    new TodoItemDto(10, "Todo 10", true),
-});
-});
 builder.Services.AddScoped<ITodoItemPort, TodoItemGateway>();
 builder.Services.AddScoped<FetchTodoItemsUsecase>();
 builder.Services.AddScoped<TodoController>();
