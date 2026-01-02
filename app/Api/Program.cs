@@ -5,7 +5,9 @@ using Api.Gateway;
 using Api.Middleware;
 using Api.Usecase;
 using Api.Usecase.Port;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,7 +60,13 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/ping", new HealthCheckOptions {
+    ResponseWriter = async (context, report) => {
+        var message = report.Status == HealthStatus.Healthy ? "pong" : "NG";
+        await context.Response.WriteAsync(message);
+    }
+
+});
 app.UseHttpsRedirection();
 
 app.MapGet("/todoitems/", (TodoController controller) => controller.Get());
