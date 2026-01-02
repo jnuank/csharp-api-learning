@@ -43,6 +43,9 @@ data:
     INSERT INTO todo.items VALUES ('d9ce064f-abfa-4e41-a8e1-4a9ed7706031', 'NotStated -> Doneにできるようにする？');
     INSERT INTO todo.items VALUES ('1b5c655b-037c-46c6-8bee-0c79b4b3dafa', 'ToDoItemの中身を変更できる');
     INSERT INTO todo.items VALUES ('99d61342-5e00-4cd4-ad60-b6ea57549672', 'テストコードを書く');
+    INSERT INTO todo.items VALUES ('16b2eab8-81c3-4582-87f3-ca3811d6cebd', '削除したtodoを復活させる(ゴミ箱的な)');
+    INSERT INTO todo.items VALUES ('46f850c4-ac78-4378-bb5c-9120ff11505d', 'Gatewayのところのawait祭りどうにかしたいな');
+    INSERT INTO todo.items VALUES ('0b11f274-da3b-4c57-b248-484e1c2a2259', 'DbConnection -> PgsqlDataSourceに変更する');
     INSERT INTO todo.item_completed VALUES ('e0538e6e-2318-404b-b37c-c0b954d56663', '2026-01-02 09:13:12.80831');
     INSERT INTO todo.item_completed VALUES ('221c271f-5a14-4197-b906-15deafdf24d9', '2026-01-02 09:13:57.627714');
     INSERT INTO todo.item_completed VALUES ('05fe0c64-d083-486e-9e14-8757ed6e2ccf', '2026-01-02 09:14:17.574775');
@@ -50,6 +53,7 @@ data:
     INSERT INTO todo.item_completed VALUES ('9fe40433-e20b-4271-8539-b9ca19be99e5', '2026-01-02 10:25:09.28165');
     INSERT INTO todo.item_completed VALUES ('c3630194-7b35-4985-992a-670f7767cff0', '2026-01-02 13:49:01.577602');
     INSERT INTO todo.item_completed VALUES ('d8283608-617f-447b-8ced-12c382b93e26', '2026-01-02 14:31:50.413216');
+    INSERT INTO todo.item_completed VALUES ('46f850c4-ac78-4378-bb5c-9120ff11505d', '2026-01-02 14:47:32.13649');
     INSERT INTO todo.item_created VALUES ('05fe0c64-d083-486e-9e14-8757ed6e2ccf', '2026-01-02 07:50:02.7358');
     INSERT INTO todo.item_created VALUES ('e0538e6e-2318-404b-b37c-c0b954d56663', '2026-01-02 07:50:13.230179');
     INSERT INTO todo.item_created VALUES ('221c271f-5a14-4197-b906-15deafdf24d9', '2026-01-02 07:50:38.474851');
@@ -65,6 +69,9 @@ data:
     INSERT INTO todo.item_created VALUES ('d9ce064f-abfa-4e41-a8e1-4a9ed7706031', '2026-01-02 14:33:02.743077');
     INSERT INTO todo.item_created VALUES ('1b5c655b-037c-46c6-8bee-0c79b4b3dafa', '2026-01-02 14:33:52.421068');
     INSERT INTO todo.item_created VALUES ('99d61342-5e00-4cd4-ad60-b6ea57549672', '2026-01-02 14:35:18.107227');
+    INSERT INTO todo.item_created VALUES ('16b2eab8-81c3-4582-87f3-ca3811d6cebd', '2026-01-02 14:37:40.612');
+    INSERT INTO todo.item_created VALUES ('46f850c4-ac78-4378-bb5c-9120ff11505d', '2026-01-02 14:39:09.260743');
+    INSERT INTO todo.item_created VALUES ('0b11f274-da3b-4c57-b248-484e1c2a2259', '2026-01-02 14:46:56.643631');
     INSERT INTO todo.item_started VALUES ('05fe0c64-d083-486e-9e14-8757ed6e2ccf', '2026-01-02 08:50:06.285272');
     INSERT INTO todo.item_started VALUES ('58a084e4-63bd-47f7-8869-42d5eb188931', '2026-01-02 09:00:57.628991');
     INSERT INTO todo.item_started VALUES ('221c271f-5a14-4197-b906-15deafdf24d9', '2026-01-02 09:11:30.723045');
@@ -72,3 +79,4 @@ data:
     INSERT INTO todo.item_started VALUES ('9fe40433-e20b-4271-8539-b9ca19be99e5', '2026-01-02 10:25:07.951091');
     INSERT INTO todo.item_started VALUES ('c3630194-7b35-4985-992a-670f7767cff0', '2026-01-02 13:48:50.757025');
     INSERT INTO todo.item_started VALUES ('d8283608-617f-447b-8ced-12c382b93e26', '2026-01-02 14:31:31.420662');
+    INSERT INTO todo.item_started VALUES ('46f850c4-ac78-4378-bb5c-9120ff11505d', '2026-01-02 14:41:01.31012');
