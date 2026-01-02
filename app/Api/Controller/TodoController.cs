@@ -18,15 +18,11 @@ public class TodoController
 
 	public async Task<IResult> Get(string? status)
 	{
-		var filters = status?
-			.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-			.Select(v => Enum.TryParse<Status>(v, true, out var parsed) 
-				? parsed 
-				: throw new ArgumentException($"Invalid status: {v}"))
-			.ToList() ?? [];
+		var filterStatuses = status.ToEnumList<Status>();
 
-		var result = await usecase.Execute(filters);
-		return Results.Ok(new TodoItemsResponse(result.Items.Select(v => new TodoItemResponse(v.Id!.Value.ToString(), v.Name, v.Status.ToString())).ToList()));
+		var result = await usecase.Execute(filterStatuses);
+
+		return Results.Ok(result.ToResponse());
 	}
 
 	public async Task<IResult> Create(CreateTodoItemRequest request)
@@ -41,4 +37,33 @@ public class TodoController
 public class CreateTodoItemRequest
 {
 	public required string Name { get; set; }
+}
+
+
+public static class StringExtensions
+{
+	public static List<TEnum> ToEnumList<TEnum>(this string? source) where TEnum : struct, Enum
+	{
+		if (string.IsNullOrWhiteSpace(source)) return [];
+
+		var values = source.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+		return [.. values.Select(v => Enum.Parse<TEnum>(v, ignoreCase: true))];
+	}
+
+}
+
+public static class TodoItemsExtensions
+{
+	public static TodoItemsResponse ToResponse(this TodoItems items)
+	{
+		List<TodoItemResponse> responses = [.. items.Items.Select(v => v.ToResponse())];
+
+		return new TodoItemsResponse(responses);
+	}
+
+	public static TodoItemResponse ToResponse(this TodoItem item)
+	{
+		return new TodoItemResponse(item.Id!.Value.ToString(), item.Name, item.Status.ToString());
+	}
 }
