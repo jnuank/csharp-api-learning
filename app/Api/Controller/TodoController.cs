@@ -3,7 +3,7 @@ namespace Api.Controller;
 using Api.Domain;
 using Api.Usecase;
 public record TodoItemsResponse(List<TodoItemResponse> Items);
-public record TodoItemResponse(int Id, string Name, bool IsComplete);
+public record TodoItemResponse(string Id, string Name, string Status);
 
 public class TodoController
 {
@@ -19,7 +19,7 @@ public class TodoController
 	public async Task<IResult> Get()
 	{
 		var result = await usecase.Execute();
-		return Results.Ok(result);
+		return Results.Ok(new TodoItemsResponse(result.Items.Select(v => new TodoItemResponse(v.Id!, v.Name, v.Status.ToString())).ToList()));
 	}
 
 	public async Task<IResult> Create(CreateTodoItemRequest request)

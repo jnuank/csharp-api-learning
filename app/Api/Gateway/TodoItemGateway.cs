@@ -1,5 +1,6 @@
 namespace Api.Gateway;
 
+using System.ComponentModel.Design;
 using System.Threading.Tasks;
 using Api.Domain;
 using Api.Driver;
@@ -21,7 +22,24 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 
 		return new TodoItems
 		(
-			[.. items.Select(v => new TodoItem(v.Id.ToString(), v.Name))]
+			[.. await Task.WhenAll(items.Select(async v => {
+				DateTime createdAt = await Driver.GetCreated(v.Id);
+				DateTime startedAt = await Driver.GetStarted(v.Id);
+				DateTime completedAt = await Driver.GetCompleted(v.Id);
+
+				Status status = Status.NotStarted;
+				DateTime latest = 
+					new[] { createdAt, startedAt, completedAt }.Max();
+				if (latest == createdAt) {
+					status = Status.NotStarted;
+				} else if (latest == startedAt) {
+					status = Status.InProgress;
+				} else if (latest == completedAt) {
+					status = Status.Done;
+				}
+
+				return new TodoItem(v.Id.ToString(), v.Name, status);
+			}))]
 		);
 	}
 }

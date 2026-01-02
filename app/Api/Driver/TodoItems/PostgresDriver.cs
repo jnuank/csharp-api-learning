@@ -39,4 +39,34 @@ public class PostgresDriver
 			new { Id = id, CreatedAt = DateTime.UtcNow }
 		);
 	}
+
+	internal async Task<DateTime> GetCreated(Guid id)
+	{
+		using var connection = new NpgsqlConnection(this.connectionString);
+		var item = await connection.QueryFirstOrDefaultAsync<DateTime>(
+			"SELECT created_at AS CreatedAt FROM todo.item_created WHERE todo_item_id = @id",
+			new { Id = id }
+		);
+		return item;
+	}
+
+	internal async Task<DateTime> GetStarted(Guid id)
+	{
+		using var connection = new NpgsqlConnection(this.connectionString);
+		var item = await connection.QueryFirstOrDefaultAsync<DateTime>(
+			"SELECT started_at AS StartedAt FROM todo.item_started WHERE todo_item_id = @id",
+			new { Id = id }
+		);
+		return item;
+	}
+
+	internal async Task<DateTime> GetCompleted(Guid id)
+	{
+		using var connection = new NpgsqlConnection(this.connectionString);
+		var item = await connection.QueryFirstOrDefaultAsync<DateTime>(
+			"SELECT completed_at AS CompletedAt FROM todo.item_completed WHERE todo_item_id = @id",
+			new { Id = id }
+		);
+		return item;
+	}
 }
