@@ -2,6 +2,7 @@ using System.Data;
 using Api.Controller;
 using Api.Driver;
 using Api.Gateway;
+using Api.Middleware;
 using Api.Usecase;
 using Api.Usecase.Port;
 using Microsoft.Data.Sqlite;
@@ -57,6 +58,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapGet("/todoitems/", (TodoController controller) => controller.Get());
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.MapGet("exception", () => {
+    throw new Exception("エラーですよ！");
+});
 
 app.Run();
 
