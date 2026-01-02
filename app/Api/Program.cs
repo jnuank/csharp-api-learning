@@ -64,6 +64,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseHttpsRedirection();
 
 app.MapHealthChecks("/ping", new HealthCheckOptions {
     ResponseWriter = async (context, report) => {
@@ -71,23 +72,11 @@ app.MapHealthChecks("/ping", new HealthCheckOptions {
         await context.Response.WriteAsync(message);
     }
 });
-app.UseHttpsRedirection();
 
-app.MapGet("/todoitems/", (TodoController controller, string? status) => {
-
-    Console.WriteLine($"status: {status}");
-    return controller.Get();
-
-} );
-app.MapPost("/todoitems/", (TodoController controller, CreateTodoItemRequest request) =>{
-    return controller.Create(request);
-});
-app.MapPost("/todoitems/{id}/start", (TodoStartController controller, string id) => {
-    return controller.Start(id);
-});
-app.MapPost("/todoitems/{id}/complete", (TodoCompleteController controller, string id) => {
-    return controller.Complete(id);
-});
+app.MapGet("/todoitems/", (TodoController controller, string? status) => controller.Get(status));
+app.MapPost("/todoitems/", (TodoController controller, CreateTodoItemRequest request) => controller.Create(request));
+app.MapPost("/todoitems/{id}/start", (TodoStartController controller, string id) => controller.Start(id));
+app.MapPost("/todoitems/{id}/complete", (TodoCompleteController controller, string id) => controller.Complete(id));
 
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();

@@ -46,9 +46,9 @@ public record TodoItem
 }
 public record TodoItems(List<TodoItem> Items)
 {
-	internal TodoItems NotDoneItems()
+	internal TodoItems NotDoneItems(List<Status> filters)
 	{
-		return new TodoItems([.. Items.Where(v => v.Status != Status.Done)]);
+		return new TodoItems([.. Items.Where(v => filters.Contains(v.Status))]);
 	}
 }
 

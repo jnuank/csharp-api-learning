@@ -16,9 +16,16 @@ public class TodoController
 		this.createTodoItemUsecase = createTodoItemUsecase;
 	}
 
-	public async Task<IResult> Get()
+	public async Task<IResult> Get(string? status)
 	{
-		var result = await usecase.Execute();
+		var filters = status?
+			.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+			.Select(v => Enum.TryParse<Status>(v, true, out var parsed) 
+				? parsed 
+				: throw new ArgumentException($"Invalid status: {v}"))
+			.ToList() ?? [];
+
+		var result = await usecase.Execute(filters);
 		return Results.Ok(new TodoItemsResponse(result.Items.Select(v => new TodoItemResponse(v.Id!.Value.ToString(), v.Name, v.Status.ToString())).ToList()));
 	}
 
