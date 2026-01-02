@@ -47,6 +47,8 @@ builder.Services.AddScoped<ITodoItemPort, TodoItemGateway>();
 builder.Services.AddScoped<FetchTodoItemsUsecase>();
 builder.Services.AddScoped<TodoController>();
 
+builder.Services.AddHealthChecks().AddNpgSql(connectionStringBuilder.ConnectionString);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,6 +57,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+
+app.MapHealthChecks("/health");
 app.UseHttpsRedirection();
 
 app.MapGet("/todoitems/", (TodoController controller) => controller.Get());
