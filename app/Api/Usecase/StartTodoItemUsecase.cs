@@ -9,11 +9,8 @@ public record StartTodoItemUsecase(ITodoItemPort TodoItemRepository)
 	{
 		TodoItem todoItem = await TodoItemRepository.GetById(id);
 
-		TodoItem startedTodoItem = todoItem.Start();
-		if (startedTodoItem == todoItem) {
-			throw new NotImplementedException("Not implemented");
-		}
-		await TodoItemRepository.UpdateStated(startedTodoItem);
+		TodoItemEvent startedEvent = todoItem.StartEvent();
+		await TodoItemRepository.UpdateStated(startedEvent);
 
 	}
 }

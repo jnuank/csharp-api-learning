@@ -40,34 +40,34 @@ public class PostgresDriver
 		);
 	}
 
-	internal async Task<DateTime> GetCreated(Guid id)
+	internal async Task<List<DateTime>> GetCreated(Guid id)
 	{
 		using var connection = new NpgsqlConnection(this.connectionString);
-		var item = await connection.QueryFirstOrDefaultAsync<DateTime>(
+		var items = await connection.QueryAsync<DateTime>(
 			"SELECT created_at AS CreatedAt FROM todo.item_created WHERE todo_item_id = @id",
 			new { Id = id }
 		);
-		return item;
+		return [.. items];
 	}
 
-	internal async Task<DateTime> GetStarted(Guid id)
+	internal async Task<List<DateTime>> GetStarted(Guid id)
 	{
 		using var connection = new NpgsqlConnection(this.connectionString);
-		var item = await connection.QueryFirstOrDefaultAsync<DateTime>(
-			"SELECT started_at AS StartedAt FROM todo.item_started WHERE todo_item_id = @id",
+		var items = await connection.QueryAsync<DateTime>(
+			"SELECT started_at AS StartedAt FROM todo.item_started WHERE todo_item_id = @id", 
 			new { Id = id }
 		);
-		return item;
+		return [.. items];
 	}
 
-	internal async Task<DateTime> GetCompleted(Guid id)
+	internal async Task<List<DateTime>> GetCompleted(Guid id)
 	{
 		using var connection = new NpgsqlConnection(this.connectionString);
-		var item = await connection.QueryFirstOrDefaultAsync<DateTime>(
+		var items = await connection.QueryAsync<DateTime>(
 			"SELECT completed_at AS CompletedAt FROM todo.item_completed WHERE todo_item_id = @id",
 			new { Id = id }
 		);
-		return item;
+		return [.. items];
 	}
 
 	internal async Task<TodoItemDto?> GetById(Guid id)

@@ -14,9 +14,9 @@ public record TodoItem
 		Name = name;
 		if (events.Count == 0) {
 			Events = new List<TodoItemEvent>{
-				new TodoItemEvent(EventType.Completed, DateTime.UtcNow + TimeSpan.FromDays(3)),
-				new TodoItemEvent(EventType.Started, DateTime.UtcNow + TimeSpan.FromDays(2)),
-				new TodoItemEvent(EventType.Created, DateTime.UtcNow + TimeSpan.FromDays(1)),
+				new TodoItemEvent(Guid.NewGuid(), EventType.Completed, DateTime.UtcNow + TimeSpan.FromDays(3)),
+				new TodoItemEvent(Guid.NewGuid(), EventType.Started, DateTime.UtcNow + TimeSpan.FromDays(2)),
+				new TodoItemEvent(Guid.NewGuid(), EventType.Created, DateTime.UtcNow + TimeSpan.FromDays(1)),
 			};
 		} else {
 			Events = events;
@@ -37,26 +37,22 @@ public record TodoItem
 			_ => throw new Exception("oko"),
 		};
 
-	public List<TodoItemEvent> Events { get; set;} 
+	public List<TodoItemEvent> Events { get; set;}
 
-	public TodoItem Start()
+	internal TodoItemEvent CompleteEvent()
 	{
-		if(Status != Status.NotStarted) {
-			return this with { };
+		if (Status != Status.InProgress) {
+			throw new Exception("Todo item is not in in progress status");
 		}
-		return this with { 
-			Events = [.. Events, new TodoItemEvent(EventType.Started, DateTime.UtcNow)]
-		};
+		return new TodoItemEvent(Guid.Parse(Id!), EventType.Completed, DateTime.UtcNow);
 	}
 
-	internal TodoItem Complete()
+	internal TodoItemEvent StartEvent()
 	{
-		if(Status != Status.InProgress) {
-			return this with { };
+		if (Status != Status.NotStarted) {
+			throw new Exception("Todo item is not in not started status");
 		}
-		return this with { 
-			Events = [.. Events, new TodoItemEvent(EventType.Completed, DateTime.UtcNow)] 
-		};
+		return new TodoItemEvent(Guid.Parse(Id!), EventType.Started, DateTime.UtcNow);
 	}
 }
 public record TodoItems(List<TodoItem> Items);
@@ -75,4 +71,4 @@ public enum EventType
 	Completed
 }
 
-public record TodoItemEvent(EventType EventType, DateTime OccurredAt);
+public record TodoItemEvent(Guid Id, EventType EventType, DateTime OccurredAt);

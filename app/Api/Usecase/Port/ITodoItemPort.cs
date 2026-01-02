@@ -7,6 +7,6 @@ public interface ITodoItemPort
 	Task<TodoItems> GetAll();
 	Task<TodoItem> GetById(Guid id);
 	Task Create(TodoItem request);
-	Task UpdateStated(TodoItem todoItem);
-	Task UpdateCompleted(TodoItem todoItem);
+	Task UpdateStated(TodoItemEvent todoEvent);
+	Task UpdateCompleted(TodoItemEvent todoEvent);
 }

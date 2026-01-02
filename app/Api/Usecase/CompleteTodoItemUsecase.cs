@@ -11,10 +11,7 @@ public record CompleteTodoItemUsecase(ITodoItemPort TodoItemRepository)
 		if (todoItem == null){
 			throw new Exception("Todo item is not found");
 		}
-		TodoItem completedTodoItem = todoItem.Complete();
-		if (completedTodoItem == todoItem) {
-			throw new NotImplementedException("Not implemented");
-		}
-		await TodoItemRepository.UpdateCompleted(completedTodoItem);
+		TodoItemEvent completedEvent = todoItem.CompleteEvent();
+		await TodoItemRepository.UpdateCompleted(completedEvent);
 	}
 }

@@ -23,22 +23,16 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 		return new TodoItems
 		(
 			[.. await Task.WhenAll(items.Select(async v => {
-				DateTime createdAt = await Driver.GetCreated(v.Id);
-				DateTime startedAt = await Driver.GetStarted(v.Id);
-				DateTime completedAt = await Driver.GetCompleted(v.Id);
+				List<DateTime> createdAt = await Driver.GetCreated(v.Id);
+				List<DateTime> startedAt = await Driver.GetStarted(v.Id);
+				List<DateTime> completedAt = await Driver.GetCompleted(v.Id);
+				List<TodoItemEvent> events = [
+					..createdAt.Select(e => new TodoItemEvent(v.Id, EventType.Created, e)),
+					..startedAt.Select(e => new TodoItemEvent(v.Id, EventType.Started, e)),
+					..completedAt.Select(e => new TodoItemEvent(v.Id, EventType.Completed, e)),
+				];
 
-				Status status = Status.NotStarted;
-				DateTime latest = 
-					new[] { createdAt, startedAt, completedAt }.Max();
-				if (latest == createdAt) {
-					status = Status.NotStarted;
-				} else if (latest == startedAt) {
-					status = Status.InProgress;
-				} else if (latest == completedAt) {
-					status = Status.Done;
-				}
-
-				return new TodoItem(v.Id.ToString(), v.Name, new List<TodoItemEvent>(), status);
+				return new TodoItem(v.Id.ToString(), v.Name, events);
 			}))]
 		);
 	}
@@ -49,30 +43,25 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 		if (item == null) {
 			throw new Exception("Todo item not found");
 		}
-		DateTime createdAt = await Driver.GetCreated(item.Id);
-		DateTime startedAt = await Driver.GetStarted(item.Id);
-		DateTime completedAt = await Driver.GetCompleted(item.Id);
+		List<DateTime> createdAt = await Driver.GetCreated(item.Id);
+		List<DateTime> startedAt = await Driver.GetStarted(item.Id);
+		List<DateTime> completedAt = await Driver.GetCompleted(item.Id);
 
-		Status status = Status.NotStarted;
-		DateTime latest = 
-			new[] { createdAt, startedAt, completedAt }.Max();
-		if (latest == createdAt) {
-			status = Status.NotStarted;
-		} else if (latest == startedAt) {
-			status = Status.InProgress;
-		} else if (latest == completedAt) {
-			status = Status.Done;
-		}
-		return new TodoItem(item.Id.ToString(), item.Name, new List<TodoItemEvent>(), status);
+		List<TodoItemEvent> events = [
+			..createdAt.Select(v => new TodoItemEvent(item.Id, EventType.Created, v)),
+			..startedAt.Select(v => new TodoItemEvent(item.Id, EventType.Started, v)),
+			..completedAt.Select(v => new TodoItemEvent(item.Id, EventType.Completed, v)),
+		];
+		return new TodoItem(item.Id.ToString(), item.Name, events);
 	}
 
-	public async Task UpdateCompleted(TodoItem todoItem)
+	public async Task UpdateCompleted(TodoItemEvent todoEvent)
 	{
-		await Driver.CreateCompleted(Guid.Parse(todoItem.Id!));
+		await Driver.CreateCompleted(todoEvent.Id);
 	}
 
-	public async Task UpdateStated(TodoItem todoItem)
+	public async Task UpdateStated(TodoItemEvent todoEvent)
 	{
-		await Driver.CreateStated(Guid.Parse(todoItem.Id!));
+		await Driver.CreateStated(todoEvent.Id);
 	}
 }
