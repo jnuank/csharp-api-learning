@@ -36,7 +36,6 @@ var connectionStringBuilder = new NpgsqlConnectionStringBuilder()
 
     Timeout = int.Parse(maxTimeout),
 
-
     Database = dbDatabase,
     Username = dbUser,
     Password = dbPassword,
@@ -56,26 +55,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast/{number}", (int number) =>
-{
-    Console.WriteLine(number);
-    var forecast = Enumerable.Range(1, number).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
 
 app.MapGet("/todoitems/", (TodoController controller) => controller.Get());
 
