@@ -32,9 +32,11 @@ data:
     INSERT INTO todo.items VALUES ('e0538e6e-2318-404b-b37c-c0b954d56663', '着手のイベントに変更する');
     INSERT INTO todo.items VALUES ('221c271f-5a14-4197-b906-15deafdf24d9', '完了済みのイベントに変更する');
     INSERT INTO todo.items VALUES ('f369f89b-147d-4ad1-b3cd-df00d384ca72', 'todoを消去する');
-
-
+    INSERT INTO todo.items VALUES ('58a084e4-63bd-47f7-8869-42d5eb188931', 'ドメインイベントをつくる');
     INSERT INTO todo.item_created VALUES ('05fe0c64-d083-486e-9e14-8757ed6e2ccf', '2026-01-02 07:50:02.7358');
     INSERT INTO todo.item_created VALUES ('e0538e6e-2318-404b-b37c-c0b954d56663', '2026-01-02 07:50:13.230179');
     INSERT INTO todo.item_created VALUES ('221c271f-5a14-4197-b906-15deafdf24d9', '2026-01-02 07:50:38.474851');
     INSERT INTO todo.item_created VALUES ('f369f89b-147d-4ad1-b3cd-df00d384ca72', '2026-01-02 07:50:47.885031');
+    INSERT INTO todo.item_created VALUES ('58a084e4-63bd-47f7-8869-42d5eb188931', '2026-01-02 09:00:20.092307');
+    INSERT INTO todo.item_started VALUES ('05fe0c64-d083-486e-9e14-8757ed6e2ccf', '2026-01-02 08:50:06.285272');
+    INSERT INTO todo.item_started VALUES ('58a084e4-63bd-47f7-8869-42d5eb188931', '2026-01-02 09:00:57.628991');
