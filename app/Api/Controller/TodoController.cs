@@ -19,7 +19,7 @@ public class TodoController
 	public async Task<IResult> Get()
 	{
 		var result = await usecase.Execute();
-		return Results.Ok(new TodoItemsResponse(result.Items.Select(v => new TodoItemResponse(v.Id!, v.Name, v.Status.ToString())).ToList()));
+		return Results.Ok(new TodoItemsResponse(result.Items.Select(v => new TodoItemResponse(v.Id!.Value.ToString(), v.Name, v.Status.ToString())).ToList()));
 	}
 
 	public async Task<IResult> Create(CreateTodoItemRequest request)

@@ -32,7 +32,7 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 					..completedAt.Select(e => new TodoItemEvent(v.Id, EventType.Completed, e)),
 				];
 
-				return new TodoItem(v.Id.ToString(), v.Name, events);
+				return new TodoItem(v.Id, v.Name, events);
 			}))]
 		);
 	}
@@ -52,7 +52,7 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 			..startedAt.Select(v => new TodoItemEvent(item.Id, EventType.Started, v)),
 			..completedAt.Select(v => new TodoItemEvent(item.Id, EventType.Completed, v)),
 		];
-		return new TodoItem(item.Id.ToString(), item.Name, events);
+		return new TodoItem(item.Id, item.Name, events);
 	}
 
 	public async Task UpdateCompleted(TodoItemEvent todoEvent)

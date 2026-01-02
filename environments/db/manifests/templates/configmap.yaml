@@ -40,6 +40,8 @@ data:
     INSERT INTO todo.item_completed VALUES ('e0538e6e-2318-404b-b37c-c0b954d56663', '2026-01-02 09:13:12.80831');
     INSERT INTO todo.item_completed VALUES ('221c271f-5a14-4197-b906-15deafdf24d9', '2026-01-02 09:13:57.627714');
     INSERT INTO todo.item_completed VALUES ('05fe0c64-d083-486e-9e14-8757ed6e2ccf', '2026-01-02 09:14:17.574775');
+    INSERT INTO todo.item_completed VALUES ('58a084e4-63bd-47f7-8869-42d5eb188931', '2026-01-02 10:12:31.627604');
+    INSERT INTO todo.item_completed VALUES ('9fe40433-e20b-4271-8539-b9ca19be99e5', '2026-01-02 10:25:09.28165');
     INSERT INTO todo.item_created VALUES ('05fe0c64-d083-486e-9e14-8757ed6e2ccf', '2026-01-02 07:50:02.7358');
     INSERT INTO todo.item_created VALUES ('e0538e6e-2318-404b-b37c-c0b954d56663', '2026-01-02 07:50:13.230179');
     INSERT INTO todo.item_created VALUES ('221c271f-5a14-4197-b906-15deafdf24d9', '2026-01-02 07:50:38.474851');
@@ -53,3 +55,4 @@ data:
     INSERT INTO todo.item_started VALUES ('58a084e4-63bd-47f7-8869-42d5eb188931', '2026-01-02 09:00:57.628991');
     INSERT INTO todo.item_started VALUES ('221c271f-5a14-4197-b906-15deafdf24d9', '2026-01-02 09:11:30.723045');
     INSERT INTO todo.item_started VALUES ('e0538e6e-2318-404b-b37c-c0b954d56663', '2026-01-02 09:12:04.385872');
+    INSERT INTO todo.item_started VALUES ('9fe40433-e20b-4271-8539-b9ca19be99e5', '2026-01-02 10:25:07.951091');

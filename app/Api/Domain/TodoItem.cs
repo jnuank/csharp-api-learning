@@ -1,5 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
-
 namespace Api.Domain;
 
 public record TodoItemOld(int Id, string Name, bool IsComplete);
@@ -8,17 +6,16 @@ public record TodoItemsOld(List<TodoItemOld> Items);
 
 public record TodoItem
 {
-	public TodoItem(string? id, string name, List<TodoItemEvent> events, Status status = Status.NotStarted)
+	public TodoItem(Guid? id, string name, List<TodoItemEvent> events)
 	{
 		Id = id;
 		Name = name;
 		Events = events;
 	}
-
-	public string? Id {
+	public Guid? Id {
 		get => field ?? throw new Exception("Id is not set");
-		set;
-	}
+		init;
+	 }
 	public string Name { get; set; }
 
 	public Status Status => 
@@ -36,7 +33,7 @@ public record TodoItem
 		if (Status != Status.InProgress) {
 			throw new Exception("Todo item is not in in progress status");
 		}
-		return new TodoItemEvent(Guid.Parse(Id!), EventType.Completed, DateTime.UtcNow);
+		return new TodoItemEvent(Id!.Value, EventType.Completed, DateTime.UtcNow);
 	}
 
 	internal TodoItemEvent StartEvent()
@@ -44,7 +41,7 @@ public record TodoItem
 		if (Status != Status.NotStarted) {
 			throw new Exception("Todo item is not in not started status");
 		}
-		return new TodoItemEvent(Guid.Parse(Id!), EventType.Started, DateTime.UtcNow);
+		return new TodoItemEvent(Id!.Value, EventType.Started, DateTime.UtcNow);
 	}
 }
 public record TodoItems(List<TodoItem> Items);
