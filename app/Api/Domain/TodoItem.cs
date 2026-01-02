@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Api.Domain;
 
 public record TodoItemOld(int Id, string Name, bool IsComplete);
