@@ -12,15 +12,7 @@ public record TodoItem
 	{
 		Id = id;
 		Name = name;
-		if (events.Count == 0) {
-			Events = new List<TodoItemEvent>{
-				new TodoItemEvent(Guid.NewGuid(), EventType.Completed, DateTime.UtcNow + TimeSpan.FromDays(3)),
-				new TodoItemEvent(Guid.NewGuid(), EventType.Started, DateTime.UtcNow + TimeSpan.FromDays(2)),
-				new TodoItemEvent(Guid.NewGuid(), EventType.Created, DateTime.UtcNow + TimeSpan.FromDays(1)),
-			};
-		} else {
-			Events = events;
-		}
+		Events = events;
 	}
 
 	public string? Id {
