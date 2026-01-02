@@ -1,4 +1,4 @@
-using Microsoft.OpenApi;
+using Npgsql;
 
 namespace Api.Middleware;
 
@@ -12,10 +12,15 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine("ここを通った");
-			context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+			var (statusCode, message) = ex switch
+			{
+				NpgsqlException => (StatusCodes.Status503ServiceUnavailable, "データベースエラーが発生しました"),
+				_ => (StatusCodes.Status500InternalServerError, "予期せぬエラーが発生しました")
+			};
+
+			context.Response.StatusCode = statusCode;
 			context.Response.ContentType = "application/json";
-			await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+			await context.Response.WriteAsJsonAsync(new { error = message });
 		}
 	}
 }
