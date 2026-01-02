@@ -1,9 +1,9 @@
 
 namespace Api.Driver;
 
-public record InMemoryDriver(List<TodoItemDto> memory)
+public record InMemoryDriver(List<TodoItemDtoOld> memory)
 {
-	public Task<List<TodoItemDto>> GetAll()
+	public Task<List<TodoItemDtoOld>> GetAll()
 	{
 		return Task.FromResult(memory);
 	}

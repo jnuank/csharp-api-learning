@@ -14,8 +14,8 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
 		{
 			var (statusCode, message) = ex switch
 			{
-				NpgsqlException => (StatusCodes.Status503ServiceUnavailable, "データベースエラーが発生しました"),
-				_ => (StatusCodes.Status500InternalServerError, "予期せぬエラーが発生しました")
+				NpgsqlException => (StatusCodes.Status503ServiceUnavailable, ex.Message),
+				_ => (StatusCodes.Status500InternalServerError, ex.Message)
 			};
 
 			context.Response.StatusCode = statusCode;

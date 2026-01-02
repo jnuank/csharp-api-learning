@@ -4,6 +4,8 @@ metadata:
   name: postgres-init-script
 data:
   init.sql: |
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
     CREATE TABLE IF NOT EXISTS todo_items_old (
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
@@ -21,3 +23,26 @@ data:
     INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 9', false);
     INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 10', true);
 
+
+    CREATE TABLE IF NOT EXISTS todo_items (
+        id UUID PRIMARY KEY,
+        name TEXT NOT NULL
+    );
+
+
+    INSERT INTO todo_items (id, name) VALUES (uuid_generate_v4(), 'Todo 1');
+
+    CREATE TABLE IF NOT EXISTS todo_item_created (
+        todo_item_id UUID REFERENCES todo_items(id),
+        created_at TIMESTAMP NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS todo_item_started (
+        todo_item_id UUID REFERENCES todo_items(id),
+        started_at TIMESTAMP NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS todo_item_completed (
+        todo_item_id UUID REFERENCES todo_items(id),
+        completed_at TIMESTAMP NOT NULL
+    );

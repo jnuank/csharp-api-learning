@@ -4,5 +4,6 @@ using Api.Domain;
 namespace Api.Usecase.Port;
 public interface ITodoItemPort
 {
-	Task<TodoItems> GetAll();
+	Task<TodoItemsOld> GetAll();
+	Task Create(TodoItem request);
 }

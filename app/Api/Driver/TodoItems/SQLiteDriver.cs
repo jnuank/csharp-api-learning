@@ -39,9 +39,9 @@ public class SQLiteDriver
 		""");
 	}
 
-	internal async Task<List<TodoItemDto>> GetAll()
+	internal async Task<List<TodoItemDtoOld>> GetAll()
 	{
-		var items = await this.connection.QueryAsync<TodoItemDto>(
+		var items = await this.connection.QueryAsync<TodoItemDtoOld>(
 			"SELECT id AS Id, name AS Name, is_complete AS IsComplete FROM todo_items"
 		);
 		return [.. items];
