@@ -15,14 +15,13 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 		await Driver.CreateCreated(id);
 	}
 
-	public async Task<TodoItemsOld> GetAll()
+	public async Task<TodoItems> GetAll()
 	{
 		var items = await Driver.GetAll();
 
-
-		return new TodoItemsOld
+		return new TodoItems
 		(
-			[.. items.Select(v => new TodoItemOld(v.Id, v.Name, v.IsComplete))]
+			[.. items.Select(v => new TodoItem(v.Id.ToString(), v.Name))]
 		);
 	}
 }

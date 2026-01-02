@@ -71,7 +71,6 @@ app.UseHttpsRedirection();
 
 app.MapGet("/todoitems/", (TodoController controller) => controller.Get());
 app.MapPost("/todoitems/", (TodoController controller, CreateTodoItemRequest request) =>{
-    Console.WriteLine($"CreateTodoItemRequest: {request.Name}, {request.Id}");
     return controller.Create(request);
 });
 

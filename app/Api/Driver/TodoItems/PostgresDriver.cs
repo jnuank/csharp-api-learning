@@ -12,11 +12,11 @@ public class PostgresDriver
 		this.connectionString = connectionString;
 	}
 
-	internal async Task<List<TodoItemDtoOld>> GetAll()
+	internal async Task<List<TodoItemDto>> GetAll()
 	{
 		using var connection = new NpgsqlConnection(this.connectionString);
-		var items = await connection.QueryAsync<TodoItemDtoOld>(
-			"SELECT id AS Id, name AS Name, is_complete AS IsComplete FROM todo_items_old"
+		var items = await connection.QueryAsync<TodoItemDto>(
+			"SELECT id AS Id, name AS Name FROM todo_items"
 		);
 
 		return [.. items];
