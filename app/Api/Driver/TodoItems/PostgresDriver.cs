@@ -16,7 +16,7 @@ public class PostgresDriver
 	{
 		using var connection = new NpgsqlConnection(this.connectionString);
 		var items = await connection.QueryAsync<TodoItemDto>(
-			"SELECT id AS Id, name AS Name, is_complete AS IsComplete FROM todo_items"
+			"SELECT id AS Id, name AS Name, is_complete AS IsComplete FROM todo_items_old"
 		);
 
 		return [.. items];

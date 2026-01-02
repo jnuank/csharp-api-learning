@@ -62,14 +62,15 @@ if (app.Environment.IsDevelopment())
 
 app.MapHealthChecks("/ping", new HealthCheckOptions {
     ResponseWriter = async (context, report) => {
-        var message = report.Status == HealthStatus.Healthy ? "pong" : "NG";
+        var message = report.Status == HealthStatus.Healthy ? "OK" : "NG";
         await context.Response.WriteAsync(message);
     }
-
 });
 app.UseHttpsRedirection();
 
 app.MapGet("/todoitems/", (TodoController controller) => controller.Get());
+
+
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
