@@ -31,6 +31,13 @@ public record TodoItem
 		return this with { Status = Status.InProgress };
 	}
 
+	internal TodoItem Complete()
+	{
+		if(Status != Status.InProgress) {
+			return this with { };
+		}
+		return this with { Status = Status.Done };
+	}
 }
 public record TodoItems(List<TodoItem> Items);
 

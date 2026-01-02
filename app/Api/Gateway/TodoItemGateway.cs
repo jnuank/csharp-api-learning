@@ -66,6 +66,11 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 		return new TodoItem(item.Id.ToString(), item.Name, status);
 	}
 
+	public async Task UpdateCompleted(TodoItem todoItem)
+	{
+		await Driver.CreateCompleted(Guid.Parse(todoItem.Id!));
+	}
+
 	public async Task UpdateStated(TodoItem todoItem)
 	{
 		await Driver.CreateStated(Guid.Parse(todoItem.Id!));

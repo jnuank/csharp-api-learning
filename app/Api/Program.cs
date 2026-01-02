@@ -51,6 +51,8 @@ builder.Services.AddScoped<CreateTodoItemUsecase>();
 builder.Services.AddScoped<StartTodoItemUsecase>();
 builder.Services.AddScoped<TodoController>();
 builder.Services.AddScoped<TodoStartController>();
+builder.Services.AddScoped<CompleteTodoItemUsecase>();
+builder.Services.AddScoped<TodoCompleteController>();
 
 builder.Services.AddHealthChecks().AddNpgSql(connectionStringBuilder.ConnectionString);
 
@@ -78,7 +80,9 @@ app.MapPost("/todoitems/", (TodoController controller, CreateTodoItemRequest req
 app.MapPost("/todoitems/{id}/start", (TodoStartController controller, string id) => {
     return controller.Start(id);
 });
-
+app.MapPost("/todoitems/{id}/complete", (TodoCompleteController controller, string id) => {
+    return controller.Complete(id);
+});
 
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();

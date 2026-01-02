@@ -88,4 +88,13 @@ public class PostgresDriver
 			new { Id = id, StartedAt = DateTime.UtcNow }
 		);
 	}
+
+	internal async Task CreateCompleted(Guid id)
+	{
+		using var connection = new NpgsqlConnection(this.connectionString);
+		await connection.ExecuteAsync(
+			"INSERT INTO todo.item_completed (todo_item_id, completed_at) VALUES (@Id, @CompletedAt)",
+			new { Id = id, CompletedAt = DateTime.UtcNow }
+		);
+	}
 }
