@@ -1,6 +1,5 @@
 namespace Api.Gateway;
 
-using System.ComponentModel.Design;
 using System.Threading.Tasks;
 using Api.Domain;
 using Api.Driver;
@@ -20,21 +19,11 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 	{
 		var items = await Driver.GetAll();
 
-		return new TodoItems
-		(
-			[.. await Task.WhenAll(items.Select(async v => {
-				List<DateTime> createdAt = await Driver.GetCreated(v.Id);
-				List<DateTime> startedAt = await Driver.GetStarted(v.Id);
-				List<DateTime> completedAt = await Driver.GetCompleted(v.Id);
-				List<TodoItemEvent> events = [
-					..createdAt.Select(e => new TodoItemEvent(v.Id, EventType.Created, e)),
-					..startedAt.Select(e => new TodoItemEvent(v.Id, EventType.Started, e)),
-					..completedAt.Select(e => new TodoItemEvent(v.Id, EventType.Completed, e)),
-				];
+		var tasks = items.Select(async v => new TodoItem(v.Id, v.Name, await GetEvents(v.Id)));
 
-				return new TodoItem(v.Id, v.Name, events);
-			}))]
-		);
+		var todoItems = await Task.WhenAll(tasks);
+
+		return new TodoItems([.. todoItems]);
 	}
 
 	public async Task<TodoItem> GetById(Guid id)
@@ -43,15 +32,9 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 		if (item == null) {
 			throw new Exception("Todo item not found");
 		}
-		List<DateTime> createdAt = await Driver.GetCreated(item.Id);
-		List<DateTime> startedAt = await Driver.GetStarted(item.Id);
-		List<DateTime> completedAt = await Driver.GetCompleted(item.Id);
 
-		List<TodoItemEvent> events = [
-			..createdAt.Select(v => new TodoItemEvent(item.Id, EventType.Created, v)),
-			..startedAt.Select(v => new TodoItemEvent(item.Id, EventType.Started, v)),
-			..completedAt.Select(v => new TodoItemEvent(item.Id, EventType.Completed, v)),
-		];
+		List<TodoItemEvent> events = await GetEvents(item.Id);
+
 		return new TodoItem(item.Id, item.Name, events);
 	}
 
@@ -63,5 +46,26 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 	public async Task UpdateStated(TodoItemEvent todoEvent)
 	{
 		await Driver.CreateStated(todoEvent.Id);
+	}
+
+	private async Task<List<TodoItemEvent>> GetEvents(Guid id)
+	{
+		var createdAtTask = Driver.GetCreated(id);
+		var startedAtTask = Driver.GetStarted(id);
+		var completedAtTask = Driver.GetCompleted(id);
+
+		await Task.WhenAll(createdAtTask, startedAtTask, completedAtTask);
+
+		List<DateTime> createdAt = createdAtTask.Result;
+		List<DateTime> startedAt = startedAtTask.Result;
+		List<DateTime> completedAt = completedAtTask.Result;
+
+		List<TodoItemEvent> events = [
+			..createdAt.Select(v => new TodoItemEvent(id, EventType.Created, v)),
+			..startedAt.Select(v => new TodoItemEvent(id, EventType.Started, v)),
+			..completedAt.Select(v => new TodoItemEvent(id, EventType.Completed, v)),
+		];
+
+		return events;
 	}
 }
