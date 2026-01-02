@@ -73,7 +73,12 @@ app.MapHealthChecks("/ping", new HealthCheckOptions {
 });
 app.UseHttpsRedirection();
 
-app.MapGet("/todoitems/", (TodoController controller) => controller.Get());
+app.MapGet("/todoitems/", (TodoController controller, string? status) => {
+
+    Console.WriteLine($"status: {status}");
+    return controller.Get();
+
+} );
 app.MapPost("/todoitems/", (TodoController controller, CreateTodoItemRequest request) =>{
     return controller.Create(request);
 });
