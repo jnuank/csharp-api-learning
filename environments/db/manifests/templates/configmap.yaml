@@ -6,43 +6,35 @@ data:
   init.sql: |
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-    CREATE TABLE IF NOT EXISTS todo_items_old (
-        id SERIAL PRIMARY KEY,
-        name TEXT NOT NULL,
-        is_complete BOOLEAN NOT NULL
-    );
+    CREATE SCHEMA IF NOT EXISTS todo;
 
-    INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 1', false);
-    INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 2', true);
-    INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 3', false);
-    INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 4', true);
-    INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 5', false);
-    INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 6', true);
-    INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 7', false);
-    INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 8', true);
-    INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 9', false);
-    INSERT INTO todo_items_old (name, is_complete) VALUES ('Todo 10', true);
-
-
-    CREATE TABLE IF NOT EXISTS todo_items (
+    CREATE TABLE IF NOT EXISTS todo.items (
         id UUID PRIMARY KEY,
         name TEXT NOT NULL
     );
 
-
-    INSERT INTO todo_items (id, name) VALUES (uuid_generate_v4(), 'Todo 1');
-
-    CREATE TABLE IF NOT EXISTS todo_item_created (
-        todo_item_id UUID REFERENCES todo_items(id),
+    CREATE TABLE IF NOT EXISTS todo.item_created (
+        todo_item_id UUID REFERENCES todo.items(id),
         created_at TIMESTAMP NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS todo_item_started (
-        todo_item_id UUID REFERENCES todo_items(id),
+    CREATE TABLE IF NOT EXISTS todo.item_started (
+        todo_item_id UUID REFERENCES todo.items(id),
         started_at TIMESTAMP NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS todo_item_completed (
-        todo_item_id UUID REFERENCES todo_items(id),
+    CREATE TABLE IF NOT EXISTS todo.item_completed (
+        todo_item_id UUID REFERENCES todo.items(id),
         completed_at TIMESTAMP NOT NULL
     );
+
+    INSERT INTO todo.items VALUES ('05fe0c64-d083-486e-9e14-8757ed6e2ccf', 'イベントから読み取ってstatusを決める');
+    INSERT INTO todo.items VALUES ('e0538e6e-2318-404b-b37c-c0b954d56663', '着手のイベントに変更する');
+    INSERT INTO todo.items VALUES ('221c271f-5a14-4197-b906-15deafdf24d9', '完了済みのイベントに変更する');
+    INSERT INTO todo.items VALUES ('f369f89b-147d-4ad1-b3cd-df00d384ca72', 'todoを消去する');
+
+
+    INSERT INTO todo.item_created VALUES ('05fe0c64-d083-486e-9e14-8757ed6e2ccf', '2026-01-02 07:50:02.7358');
+    INSERT INTO todo.item_created VALUES ('e0538e6e-2318-404b-b37c-c0b954d56663', '2026-01-02 07:50:13.230179');
+    INSERT INTO todo.item_created VALUES ('221c271f-5a14-4197-b906-15deafdf24d9', '2026-01-02 07:50:38.474851');
+    INSERT INTO todo.item_created VALUES ('f369f89b-147d-4ad1-b3cd-df00d384ca72', '2026-01-02 07:50:47.885031');

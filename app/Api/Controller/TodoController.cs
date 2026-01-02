@@ -34,5 +34,4 @@ public class TodoController
 public class CreateTodoItemRequest
 {
 	public required string Name { get; set; }
-	public required int Id { get; set; }
 }

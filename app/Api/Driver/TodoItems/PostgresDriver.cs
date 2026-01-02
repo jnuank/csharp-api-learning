@@ -16,7 +16,7 @@ public class PostgresDriver
 	{
 		using var connection = new NpgsqlConnection(this.connectionString);
 		var items = await connection.QueryAsync<TodoItemDto>(
-			"SELECT id AS Id, name AS Name FROM todo_items"
+			"SELECT id AS Id, name AS Name FROM todo.items"
 		);
 
 		return [.. items];
@@ -26,7 +26,7 @@ public class PostgresDriver
 	{
 		using var connection = new NpgsqlConnection(this.connectionString);
 		await connection.ExecuteAsync(
-			"INSERT INTO todo_items (id, name) VALUES (@Id, @Name)",
+			"INSERT INTO todo.items (id, name) VALUES (@Id, @Name)",
 			request
 		);
 	}
@@ -35,7 +35,7 @@ public class PostgresDriver
 	{
 		using var connection = new NpgsqlConnection(this.connectionString);
 		await connection.ExecuteAsync(
-			"INSERT INTO todo_item_created (todo_item_id, created_at) VALUES (@Id, @CreatedAt)",
+			"INSERT INTO todo.item_created (todo_item_id, created_at) VALUES (@Id, @CreatedAt)",
 			new { Id = id, CreatedAt = DateTime.UtcNow }
 		);
 	}
