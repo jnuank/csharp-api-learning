@@ -44,7 +44,14 @@ public record TodoItem
 		return new TodoItemEvent(Id!.Value, EventType.Started, DateTime.UtcNow);
 	}
 }
-public record TodoItems(List<TodoItem> Items);
+public record TodoItems(List<TodoItem> Items)
+{
+	internal TodoItems NotDoneItems()
+	{
+		return new TodoItems([.. Items.Where(v => v.Status != Status.Done)]);
+	}
+}
+
 
 public enum Status
 {
