@@ -48,7 +48,9 @@ builder.Services.AddScoped(_ => new PostgresDriver(connectionStringBuilder.Conne
 builder.Services.AddScoped<ITodoItemPort, TodoItemGateway>();
 builder.Services.AddScoped<FetchTodoItemsUsecase>();
 builder.Services.AddScoped<CreateTodoItemUsecase>();
+builder.Services.AddScoped<StartTodoItemUsecase>();
 builder.Services.AddScoped<TodoController>();
+builder.Services.AddScoped<TodoStartController>();
 
 builder.Services.AddHealthChecks().AddNpgSql(connectionStringBuilder.ConnectionString);
 
@@ -72,6 +74,9 @@ app.UseHttpsRedirection();
 app.MapGet("/todoitems/", (TodoController controller) => controller.Get());
 app.MapPost("/todoitems/", (TodoController controller, CreateTodoItemRequest request) =>{
     return controller.Create(request);
+});
+app.MapPost("/todoitems/{id}/start", (TodoStartController controller, string id) => {
+    return controller.Start(id);
 });
 
 

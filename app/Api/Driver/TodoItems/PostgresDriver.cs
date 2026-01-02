@@ -69,4 +69,23 @@ public class PostgresDriver
 		);
 		return item;
 	}
+
+	internal async Task<TodoItemDto?> GetById(Guid id)
+	{
+		using var connection = new NpgsqlConnection(this.connectionString);
+		var item = await connection.QueryFirstOrDefaultAsync<TodoItemDto>(
+			"SELECT id AS Id, name AS Name FROM todo.items WHERE id = @id",
+			new { Id = id }
+		);
+		return item;
+	}
+
+	internal async Task CreateStated(Guid id)
+	{
+		using var connection = new NpgsqlConnection(this.connectionString);
+		await connection.ExecuteAsync(
+			"INSERT INTO todo.item_started (todo_item_id, started_at) VALUES (@Id, @StartedAt)",
+			new { Id = id, StartedAt = DateTime.UtcNow }
+		);
+	}
 }

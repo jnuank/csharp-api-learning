@@ -23,6 +23,14 @@ public record TodoItem
 
 	public Status Status { get; set; }
 
+	public TodoItem Start()
+	{
+		if(Status != Status.NotStarted) {
+			return this with { };
+		}
+		return this with { Status = Status.InProgress };
+	}
+
 }
 public record TodoItems(List<TodoItem> Items);
 
