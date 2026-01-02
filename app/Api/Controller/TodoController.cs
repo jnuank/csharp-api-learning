@@ -24,7 +24,7 @@ public class TodoController
 
 	public async Task<IResult> Create(CreateTodoItemRequest request)
 	{
-		var todoItem = new TodoItem(null, request.Name);
+		var todoItem = new TodoItem(null, request.Name, new List<TodoItemEvent>());
 		await createTodoItemUsecase.Execute(todoItem);
 		return Results.Ok();
 

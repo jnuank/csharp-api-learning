@@ -38,7 +38,7 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 					status = Status.Done;
 				}
 
-				return new TodoItem(v.Id.ToString(), v.Name, status);
+				return new TodoItem(v.Id.ToString(), v.Name, new List<TodoItemEvent>(), status);
 			}))]
 		);
 	}
@@ -63,7 +63,7 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 		} else if (latest == completedAt) {
 			status = Status.Done;
 		}
-		return new TodoItem(item.Id.ToString(), item.Name, status);
+		return new TodoItem(item.Id.ToString(), item.Name, new List<TodoItemEvent>(), status);
 	}
 
 	public async Task UpdateCompleted(TodoItem todoItem)
