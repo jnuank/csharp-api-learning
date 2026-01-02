@@ -48,7 +48,10 @@ public record TodoItems(List<TodoItem> Items)
 {
 	internal TodoItems FilterByStatuses(List<Status> statuses)
 	{
-		return new TodoItems([.. Items.Where(v => statuses.Contains(v.Status))]);
+		return statuses switch {
+			[] => new TodoItems([.. Items.Where(v => v.Status != Status.Done)]),
+			[..] => new TodoItems([.. Items.Where(v => statuses.Contains(v.Status))]),
+		};
 	}
 }
 
