@@ -18,9 +18,9 @@ public class TodoController
 
 	public async Task<IResult> Get(string? status)
 	{
-		var filterStatuses = status.ToEnumList<Status>();
+		List<Status> filterStatuses = status.ToEnumList<Status>();
 
-		var result = await usecase.Execute(filterStatuses);
+		TodoItems result = await usecase.Execute(filterStatuses);
 
 		return Results.Ok(result.ToResponse());
 	}
@@ -55,15 +55,16 @@ public static class StringExtensions
 
 public static class TodoItemsExtensions
 {
-	public static TodoItemsResponse ToResponse(this TodoItems items)
-	{
-		List<TodoItemResponse> responses = [.. items.Items.Select(v => v.ToResponse())];
 
-		return new TodoItemsResponse(responses);
+	extension(TodoItems items)
+	{
+		public TodoItemsResponse ToResponse() => new([.. items.Items.Select(v => v.ToResponse())]);
+
 	}
 
-	public static TodoItemResponse ToResponse(this TodoItem item)
+	extension(TodoItem item)
 	{
-		return new TodoItemResponse(item.Id!.Value.ToString(), item.Name, item.Status.ToString());
+		public TodoItemResponse ToResponse() => new(item.IdString, item.Name, item.StatusString);
 	}
+
 }

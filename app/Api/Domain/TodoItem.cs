@@ -26,6 +26,8 @@ public record TodoItem
 			_ => throw new Exception("oko"),
 		};
 
+	public string StatusString => Status.ToString();
+
 	public List<TodoItemEvent> Events { get; set;}
 
 	internal TodoItemEvent CompleteEvent()
@@ -35,6 +37,8 @@ public record TodoItem
 		}
 		return new TodoItemEvent(Id!.Value, EventType.Completed, DateTime.UtcNow);
 	}
+
+	public string IdString => Id!.Value.ToString();
 
 	internal TodoItemEvent StartEvent()
 	{

@@ -1,3 +1,4 @@
+#!/usr/bin/env dotnet 
 Console.WriteLine("Hello, World!");
 
 
@@ -63,12 +64,24 @@ public class Score : IComparable<Score>
 	}
 }
 
-public static class ScoreExtensions
+public static class SomeExtensions
 {
-	public static bool IsGreaterThan<T>(this IComparable<T> score, T other)
-		=> score.CompareTo(other) > 0;
-	public static bool IsLessThan<T>(this IComparable<T> score, T other)
-		=> score.CompareTo(other) < 0;
-	public static bool IsEqualTo<T>(this IComparable<T> score, T other)
-		=> score.CompareTo(other) == 0;
+	extension<T>(IComparable<T> source)
+	{
+		public bool IsGreaterThan(T other) => source.CompareTo(other) > 0;
+		public bool IsLessThan(T other) => source.CompareTo(other) < 0;
+		public bool IsEqualTo(T other) => source.CompareTo(other) == 0;
+
+	}
 }
+
+// public static class ScoreExtensions
+// {
+// 	public static bool IsGreaterThan<T>(this IComparable<T> score, T other)
+// 		=> score.CompareTo(other) > 0;
+// 	public static bool IsLessThan<T>(this IComparable<T> score, T other)
+// 		=> score.CompareTo(other) < 0;
+// 	public static bool IsEqualTo<T>(this IComparable<T> score, T other)
+// 		=> score.CompareTo(other) == 0;
+// }
+
