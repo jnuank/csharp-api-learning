@@ -59,7 +59,6 @@ public static class TodoItemsExtensions
 	extension(TodoItems items)
 	{
 		public TodoItemsResponse ToResponse() => new([.. items.Items.Select(v => v.ToResponse())]);
-
 	}
 
 	extension(TodoItem item)
