@@ -7,7 +7,7 @@ namespace Api.Domain.Base;
 [CollectionBuilder(typeof(SequenceEquatableList), nameof(SequenceEquatableList.Create))]
 public readonly struct SequenceEquatableList<T> : IEnumerable<T> where T : IEquatable<T>
 {
-	public ImmutableList<T> Items { get; }
+	private ImmutableList<T> Items { get; }
 
 	public SequenceEquatableList(ImmutableList<T> items) => Items = items ?? [];
 

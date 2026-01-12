@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Api.Domain.Base;
 
 namespace Api.Domain;
@@ -22,7 +21,7 @@ public record TodoItem
 	public string Name { get; set; }
 
 	public Status Status => 
-		Events.Values.Items.OrderByDescending(e => e.OccurredAt).First().EventType switch {
+		Events.LastEvent.EventType switch {
 			EventType.Created => Status.NotStarted,
 			EventType.Started => Status.InProgress,
 			EventType.Completed => Status.Done,
@@ -79,4 +78,8 @@ public enum EventType
 
 public record TodoItemEvent(Guid Id, EventType EventType, DateTime OccurredAt);
 
-public record TodoItemEvents(SequenceEquatableList<TodoItemEvent> Values);
+public record TodoItemEvents(SequenceEquatableList<TodoItemEvent> Values)
+{
+	internal TodoItemEvent LastEvent => Values.OrderByDescending(e => e.OccurredAt).First();
+}
+
