@@ -1,5 +1,6 @@
 namespace Api.Controller;
 
+using System.Collections.Immutable;
 using Api.Domain;
 using Api.Usecase;
 public record TodoItemsResponse(List<TodoItemResponse> Items);
@@ -27,7 +28,7 @@ public class TodoController
 
 	public async Task<IResult> Create(CreateTodoItemRequest request)
 	{
-		var todoItem = new TodoItem(null, request.Name, new List<TodoItemEvent>());
+		var todoItem = new TodoItem(null, request.Name, new TodoItemEvents([]));
 		await createTodoItemUsecase.Execute(todoItem);
 		return Results.Ok();
 

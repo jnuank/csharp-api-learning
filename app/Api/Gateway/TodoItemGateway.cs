@@ -1,5 +1,6 @@
 namespace Api.Gateway;
 
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Api.Domain;
 using Api.Driver;
@@ -19,7 +20,7 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 	{
 		var items = await Driver.GetAll();
 
-		var tasks = items.Select(async v => new TodoItem(v.Id, v.Name, await GetEvents(v.Id)));
+		var tasks = items.Select(async v => new TodoItem(v.Id, v.Name, new TodoItemEvents(await GetEvents(v.Id))));
 
 		var todoItems = await Task.WhenAll(tasks);
 
@@ -33,9 +34,9 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 			throw new Exception("Todo item not found");
 		}
 
-		List<TodoItemEvent> events = await GetEvents(item.Id);
+		ImmutableList<TodoItemEvent> events = await GetEvents(item.Id);
 
-		return new TodoItem(item.Id, item.Name, events);
+		return new TodoItem(item.Id, item.Name, new TodoItemEvents(events));
 	}
 
 	public async Task UpdateCompleted(TodoItemEvent todoEvent)
@@ -48,7 +49,7 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 		await Driver.CreateStated(todoEvent.Id);
 	}
 
-	private async Task<List<TodoItemEvent>> GetEvents(Guid id)
+	private async Task<ImmutableList<TodoItemEvent>> GetEvents(Guid id)
 	{
 		var createdAtTask = Driver.GetCreated(id);
 		var startedAtTask = Driver.GetStarted(id);
@@ -66,6 +67,6 @@ public record TodoItemGateway(PostgresDriver Driver) : ITodoItemPort
 			..completedAt.Select(v => new TodoItemEvent(id, EventType.Completed, v)),
 		];
 
-		return events;
+		return [.. events];
 	}
 }
