@@ -10,5 +10,4 @@ public class TodoStartController(StartTodoItemUsecase StartTodoItemUsecase)
 		return Results.NoContent();
 	}
 
-
 }
