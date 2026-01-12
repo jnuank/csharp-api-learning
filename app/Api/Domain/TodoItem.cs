@@ -80,6 +80,6 @@ public record TodoItemEvent(Guid Id, EventType EventType, DateTime OccurredAt);
 
 public record TodoItemEvents(SequenceEquatableList<TodoItemEvent> Values)
 {
-	internal TodoItemEvent LastEvent => Values.OrderByDescending(e => e.OccurredAt).First();
+	internal TodoItemEvent LastEvent => Values.MaxBy(e => e.OccurredAt) ?? throw new Exception("No events");
 }
 
