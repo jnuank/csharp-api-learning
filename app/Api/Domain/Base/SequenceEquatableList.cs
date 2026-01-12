@@ -4,16 +4,14 @@ using System.Runtime.CompilerServices;
 
 namespace Api.Domain.Base;
 
-[CollectionBuilder(typeof(SequenceEquatableList), nameof(SequenceEquatableList.Create))]
-public readonly struct SequenceEquatableList<T> : IEnumerable<T> where T : IEquatable<T>
+[CollectionBuilder(typeof(SequenceEquatableList), "Create")]
+public readonly struct SequenceEquatableList<T>(ImmutableList<T> items) : IEnumerable<T> where T : IEquatable<T>
 {
-	private ImmutableList<T> Items { get; }
-
-	public SequenceEquatableList(ImmutableList<T> items) => Items = items ?? [];
+	private ImmutableList<T> Items { get; } = items ?? [];
 
 	public bool Equals(SequenceEquatableList<T> other) => Items.SequenceEqual(other.Items);
 
-	public override bool Equals(object? obj) => obj is SequenceEquatableList<T> other && Equals(other);
+	public override bool Equals(object? obj) => obj is SequenceEquatableList<T> other && Items.SequenceEqual(other.Items);
 
 	public override int GetHashCode()
 	{
@@ -32,6 +30,12 @@ public readonly struct SequenceEquatableList<T> : IEnumerable<T> where T : IEqua
 	public static implicit operator SequenceEquatableList<T>(ImmutableList<T> list) => new(list);
 
 	public override string ToString() => $"[{string.Join(", ", Items)}]";
+	public static bool operator ==(SequenceEquatableList<T> left, SequenceEquatableList<T> right)
+	 => left.Equals(right);
+
+	public static bool operator !=(SequenceEquatableList<T> left, SequenceEquatableList<T> right)
+	 => !(left == right);
+
 }
 
 public static class SequenceEquatableList
