@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using Api.Domain.Base;
 
 namespace Api.Domain;
 
@@ -21,7 +22,7 @@ public record TodoItem
 	public string Name { get; set; }
 
 	public Status Status => 
-		Events.Values.OrderByDescending(e => e.OccurredAt).First().EventType switch {
+		Events.Values.Items.OrderByDescending(e => e.OccurredAt).First().EventType switch {
 			EventType.Created => Status.NotStarted,
 			EventType.Started => Status.InProgress,
 			EventType.Completed => Status.Done,
@@ -93,20 +94,4 @@ public enum EventType
 
 public record TodoItemEvent(Guid Id, EventType EventType, DateTime OccurredAt);
 
-public record TodoItemEvents(ImmutableList<TodoItemEvent> Values)
-{
-	public virtual bool Equals(TodoItemEvents? other)
-	{
-		if (other == null) return false;
-		if (ReferenceEquals(this, other)) return true;
-		return Values.SequenceEqual(other.Values);
-	}
-
-	public override int GetHashCode() {
-		var hash = new HashCode();
-		foreach (var e in Values) {
-			hash.Add(e.GetHashCode());
-		}
-		return hash.ToHashCode();
-	}
-}
+public record TodoItemEvents(SequenceEquatableList<TodoItemEvent> Values);
