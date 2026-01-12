@@ -1,8 +1,11 @@
+using System.Collections;
 using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 
 namespace Api.Domain.Base;
 
-public readonly struct SequenceEquatableList<T> where T : IEquatable<T>
+[CollectionBuilder(typeof(SequenceEquatableList), nameof(SequenceEquatableList.Create))]
+public readonly struct SequenceEquatableList<T> : IEnumerable<T> where T : IEquatable<T>
 {
 	public ImmutableList<T> Items { get; }
 
@@ -22,5 +25,17 @@ public readonly struct SequenceEquatableList<T> where T : IEquatable<T>
 		return hash.ToHashCode();
 	}
 
+	public IEnumerator<T> GetEnumerator() => Items.GetEnumerator();
+
+	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
 	public static implicit operator SequenceEquatableList<T>(ImmutableList<T> list) => new(list);
+
+	public override string ToString() => $"[{string.Join(", ", Items)}]";
+}
+
+public static class SequenceEquatableList
+{
+	public static SequenceEquatableList<T> Create<T>(ReadOnlySpan<T> items) where T : IEquatable<T> => new(ImmutableList.Create(items));
+
 }

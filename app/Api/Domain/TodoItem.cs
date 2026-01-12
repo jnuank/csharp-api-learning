@@ -51,23 +51,8 @@ public record TodoItem
 		return new TodoItemEvent(Id!.Value, EventType.Started, DateTime.UtcNow);
 	}
 }
-public record TodoItems(ImmutableList<TodoItem> Items)
+public record TodoItems(SequenceEquatableList<TodoItem> Items)
 {
-	public virtual bool Equals(TodoItems? other)
-	{
-		if (other == null) return false;
-		if (ReferenceEquals(this, other)) return true;
-		return Items.SequenceEqual(other.Items);
-	}
-
-	public override int GetHashCode() {
-		var hash = new HashCode();
-		foreach (var item in Items) {
-			hash.Add(item.GetHashCode());
-		}
-		return hash.ToHashCode();
-	}
-
 	internal TodoItems FilterByStatuses(List<Status> statuses)
 	{
 		return statuses switch {

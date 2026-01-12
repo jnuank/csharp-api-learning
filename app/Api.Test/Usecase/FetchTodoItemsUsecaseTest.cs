@@ -21,6 +21,6 @@ public class FetchTodoItemsUsecaseTest
 
 		var sut = new FetchTodoItemsUsecase(mockPort.Object);
 		var actual = await sut.Execute([]);
-		Assert.Equal(new TodoItems([new TodoItem(todoGuid, "Todo 1", new TodoItemEvents(events))]), actual);
+		Assert.Equal(new TodoItems([new TodoItem(todoGuid, "Todo 2", new TodoItemEvents(events))]), actual);
 	}
 }
